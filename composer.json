@@ -41,6 +41,7 @@
     },
     "scripts": {
         "depcheck": "@php vendor/bin/composer-dependency-analyser --config=depcheck.php",
+        "ecs": "@php vendor/bin/ecs check --fix",
         "rector": "@php vendor/bin/rector --debug"
     },
     "extra": {
