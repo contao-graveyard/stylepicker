@@ -4,15 +4,6 @@ declare(strict_types=1);
 
 use Contao\ArrayUtil;
 
-/**
- * Contao Extension to pick predefined CSS-Classes in the backend.
- *
- * @copyright  4ward.media 2013
- * @see        http://www.4wardmedia.de
- * @licence    LGPL
- * @filesource
- */
-
 // Add the theme-operation icon
 ArrayUtil::arrayInsert($GLOBALS['TL_DCA']['tl_theme']['list']['operations'], 6, [
     'stylepicker4ward' => [

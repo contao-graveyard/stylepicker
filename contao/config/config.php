@@ -5,17 +5,9 @@ declare(strict_types=1);
 use Contao\Environment;
 use Contao\Input;
 use Contao\System;
-use Psi\Stylepicker4ward\Importer;
+use ContaoGraveyard\StylePickerBundle\Importer;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * Contao Extension to pick predefined CSS-Classes in the backend.
- *
- * @copyright  4ward.media 2013
- * @see        http://www.4wardmedia.de
- * @licence    LGPL
- * @filesource
- */
 if (System::getContainer()->get('contao.routing.scope_matcher')->isBackendRequest(System::getContainer()->get('request_stack')->getCurrentRequest() ?? Request::create('')) && Input::get('do') !== 'repository_manager' && Input::get('do') !== 'composer' && Environment::get('script') !== 'contao/install.php') {
     $GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_stylepicker4ward';
     $GLOBALS['BE_MOD']['design']['themes']['tables'][] = 'tl_stylepicker4ward_target';

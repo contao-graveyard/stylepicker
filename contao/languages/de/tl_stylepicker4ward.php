@@ -1,16 +1,6 @@
 <?php
 
-/**
- * Contao Extension to pick predefined CSS-Classes in the backend
- *
- * @copyright  4ward.media 2013
- * @author     Christoph Wiechert <christoph.wiechert@4wardmedia.de>
- * @see        http://www.4wardmedia.de
- * @package    stylepicker4ward
- * @licence    LGPL
- * @filesource
- */
-
+declare(strict_types=1);
 
 // Buttons
 $GLOBALS['TL_LANG']['tl_stylepicker4ward']['new'] 	= ['Neue CSS-Klasse','Neue CSS-Klasse erstellen'];
@@ -46,5 +36,3 @@ $GLOBALS['TL_LANG']['tl_stylepicker4ward']['_Pages']		= ['Seiten','Diese Stylede
 
 $GLOBALS['TL_LANG']['tl_stylepicker4ward']['_rowError'] = 'Es muss mindestens eine Spalte gewählt werden.';
 $GLOBALS['TL_LANG']['tl_stylepicker4ward']['_ceError'] = 'Es muss mindestens eine Inhaltselement gewählt werden.';
-
-

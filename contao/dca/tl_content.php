@@ -4,15 +4,6 @@ declare(strict_types=1);
 
 use Contao\StringUtil;
 
-/**
- * Contao Extension to pick predefined CSS-Classes in the backend.
- *
- * @copyright  4ward.media 2013
- * @see        http://www.4wardmedia.de
- * @licence    LGPL
- * @filesource
- */
-
 // Add Callback to show the css-classes in the contentelement-listing
 $GLOBALS['TL_DCA']['tl_content']['list']['sorting']['child_record_callback'] = ['tl_content_stylepicker', 'addClassNames'];
 

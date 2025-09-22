@@ -5,16 +5,7 @@ declare(strict_types=1);
 use Contao\DataContainer;
 use Contao\DC_Table;
 
-/**
- * Contao Extension to pick predefined CSS-Classes in the backend.
- *
- * @copyright  4ward.media 2013
- * @see        http://www.4wardmedia.de
- * @licence    LGPL
- * @filesource
- */
-$GLOBALS['TL_DCA']['tl_stylepicker4ward'] =
-[
+$GLOBALS['TL_DCA']['tl_stylepicker4ward'] = [
     // Config
     'config' => [
         'dataContainer' => DC_Table::class,

@@ -2,11 +2,7 @@
 
 declare(strict_types=1);
 
-/**
- * @copyright 4ward.media 2013 <http://www.4wardmedia.de>
- */
-
-namespace Psi\Stylepicker4ward;
+namespace ContaoGraveyard\StylePickerBundle;
 
 use Contao\BackendTemplate;
 use Contao\CheckBox;

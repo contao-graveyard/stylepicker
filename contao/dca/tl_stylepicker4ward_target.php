@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 use Contao\DC_Table;
 
-$GLOBALS['TL_DCA']['tl_stylepicker4ward_target'] =
-[
+$GLOBALS['TL_DCA']['tl_stylepicker4ward_target'] = [
     'config' => [
         'dataContainer' => DC_Table::class,
         'sql' => [
