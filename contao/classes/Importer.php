@@ -8,13 +8,23 @@ declare(strict_types=1);
 
 namespace Psi\Stylepicker4ward;
 
+use Contao\System;
+use Contao\Controller;
+use Contao\SelectMenu;
+use Contao\Widget;
+use Contao\CheckBox;
+use Contao\Input;
+use Contao\Database;
+use Contao\Message;
+use Contao\LayoutModel;
+use Contao\StringUtil;
 use Contao\BackendTemplate;
 
 class Importer
 {
     public function generate()
     {
-        \Controller::loadLanguageFile('stylepicker4ward_import');
+        Controller::loadLanguageFile('stylepicker4ward_import');
 
         $presetOptions = [];
 
@@ -24,8 +34,8 @@ class Importer
             }
         }
 
-        $presetWidget = new \SelectMenu(
-            \Widget::getAttributesFromDca(
+        $presetWidget = new SelectMenu(
+            Widget::getAttributesFromDca(
                 [
                     'label' => &$GLOBALS['TL_LANG']['stylepicker4ward_import']['preset'],
                     'options' => $presetOptions,
@@ -39,8 +49,8 @@ class Importer
             ),
         );
 
-        $layoutsWidget = new \CheckBox(
-            \Widget::getAttributesFromDca(
+        $layoutsWidget = new CheckBox(
+            Widget::getAttributesFromDca(
                 [
                     'label' => &$GLOBALS['TL_LANG']['stylepicker4ward_import']['layouts'],
                     'foreignKey' => 'tl_layout.name',
@@ -53,13 +63,13 @@ class Importer
             ),
         );
 
-        if (\Input::post('import')) {
-            $presetWidget->value = \Input::post('preset');
+        if (Input::post('import')) {
+            $presetWidget->value = Input::post('preset');
             $presetWidget->validate();
 
             $presetName = $presetWidget->value;
 
-            $layoutsWidget->value = \Input::post('layouts');
+            $layoutsWidget->value = Input::post('layouts');
             $layoutsWidget->validate();
 
             if (
@@ -69,12 +79,12 @@ class Importer
                 && $layoutsWidget->submitInput()
                 && isset($GLOBALS['STYLEPICKER_PRESET'][$presetName])
             ) {
-                $database = \Database::getInstance();
+                $database = Database::getInstance();
 
                 foreach ($GLOBALS['STYLEPICKER_PRESET'][$presetName]['classes'] as $class => $config) {
                     $row = [
                         'id' => null,
-                        'pid' => \Input::get('id'),
+                        'pid' => Input::get('id'),
                         'tstamp' => time(),
                         'title' => $config['title'] ?? $class,
                         'description' => $config['description'],
@@ -121,8 +131,8 @@ class Importer
                             }
                         }
 
-                        \Input::setPost('_CEs', $assignedContentElementNames);
-                        \Input::setPost('_CE_Row', $assignedSectionNames);
+                        Input::setPost('_CEs', $assignedContentElementNames);
+                        Input::setPost('_CE_Row', $assignedSectionNames);
 
                         $helper->saveCEs(serialize($assignedContentElementNames), $this->objDc);
                     }
@@ -139,7 +149,7 @@ class Importer
                             }
                         }
 
-                        \Input::setPost('_Article_Row', $assignedSectionNames);
+                        Input::setPost('_Article_Row', $assignedSectionNames);
 
                         $helper->saveArticles(serialize($assignedSectionNames), $this->objDc);
 
@@ -155,18 +165,18 @@ class Importer
                     }
                 }
 
-                \Message::addConfirmation(
+                Message::addConfirmation(
                     \sprintf(
                         $GLOBALS['TL_LANG']['stylepicker4ward_import']['confirmation'],
                         $GLOBALS['STYLEPICKER_PRESET'][$presetName]['label'],
                     ),
                 );
 
-                \Controller::redirect(
+                Controller::redirect(
                     \sprintf(
                         'contao/main.php?do=themes&table=tl_stylepicker4ward&id=%s&rt=%s&ref=%s',
-                        \Input::get('id'),
-                        \RequestToken::get(),
+                        Input::get('id'),
+                        System::getContainer()->get('contao.csrf.token_manager')->getDefaultTokenValue(),
                         TL_REFERER_ID,
                     ),
                 );
@@ -195,10 +205,10 @@ class Importer
     {
         $sections = ['header', 'left', 'right', 'main', 'footer'];
 
-        $layouts = \LayoutModel::findBy(['sections!=?'], ['']);
+        $layouts = LayoutModel::findBy(['sections!=?'], ['']);
         if ($layouts) {
             foreach ($layouts as $layout) {
-                $layoutSections = trimsplit(',', $layout->sections);
+                $layoutSections = StringUtil::trimsplit(',', $layout->sections);
 
                 foreach ($layoutSections as $section) {
                     if (!\in_array($section, $sections, true)) {

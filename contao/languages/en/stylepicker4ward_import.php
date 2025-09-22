@@ -20,8 +20,8 @@ $GLOBALS['TL_LANG']['stylepicker4ward_import']['headline'] = 'Import';
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['stylepicker4ward_import']['preset'] = array('CSS-Classes', '');
-$GLOBALS['TL_LANG']['stylepicker4ward_import']['layouts'] = array('Layouts', '');
+$GLOBALS['TL_LANG']['stylepicker4ward_import']['preset'] = ['CSS-Classes', ''];
+$GLOBALS['TL_LANG']['stylepicker4ward_import']['layouts'] = ['Layouts', ''];
 
 /**
  * Buttons

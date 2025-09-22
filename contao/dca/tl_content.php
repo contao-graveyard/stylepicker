@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Contao\StringUtil;
+
 /**
  * Contao Extension to pick predefined CSS-Classes in the backend.
  *
@@ -24,7 +26,7 @@ class tl_content_stylepicker extends tl_content
     public function addClassNames($arrRow)
     {
         $ret = '';
-        $cssID = deserialize($arrRow['cssID']);
+        $cssID = StringUtil::deserialize($arrRow['cssID']);
         $ret .= $this->addCteType($arrRow);
         if ($cssID[1]) {
             $ret .= '<div style="position: absolute; top: 30px; color: #999; right: 10px">' . $GLOBALS['TL_LANG']['tl_content']['_cssclasses'] . '' . $cssID[1] . '</div>';

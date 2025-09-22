@@ -8,10 +8,17 @@ declare(strict_types=1);
 
 namespace Psi\Stylepicker4ward;
 
-class DcaHelper extends \Controller
+use Contao\Controller;
+use Contao\Database;
+use Contao\Input;
+use Contao\Image;
+use Exception;
+use Contao\StringUtil;
+
+class DcaHelper extends Controller
 {
     /**
-     * @var \Database
+     * @var Database
      */
     protected $Database;
 
@@ -20,8 +27,7 @@ class DcaHelper extends \Controller
      */
     public function __construct()
     {
-        parent::__construct();
-        $this->Database = \Database::getInstance();
+        $this->Database = Database::getInstance();
     }
 
     /**
@@ -30,7 +36,7 @@ class DcaHelper extends \Controller
     public function injectStylepicker($table): void
     {
         // dont inject in some system-modules
-        if (\in_array(\Input::get('do'), ['repository_manager', 'repository_catalog', 'maintenance', 'settings', 'log', 'autoload', 'composer'], true)) {
+        if (\in_array(Input::get('do'), ['repository_manager', 'repository_catalog', 'maintenance', 'settings', 'log', 'autoload', 'composer'], true)) {
             return;
         }
 
@@ -90,7 +96,7 @@ class DcaHelper extends \Controller
             $str = '';
         }
 
-        return $str . ' <a href="javascript:openStylepickerPopup(\'' . $url . '\');">' . \Image::getHtml('system/modules/_stylepicker4ward/assets/icon.png', $GLOBALS['TL_LANG']['MSC']['stylepicker4ward'], 'style="vertical-align:top;margin-left:3px;margin-top:3px;"') . '</a>';
+        return $str . ' <a href="javascript:openStylepickerPopup(\'' . $url . '\');">' . Image::getHtml('system/modules/_stylepicker4ward/assets/icon.png', $GLOBALS['TL_LANG']['MSC']['stylepicker4ward'], 'style="vertical-align:top;margin-left:3px;margin-top:3px;"') . '</a>';
     }
 
     public function generateItem($arrRow)
@@ -106,7 +112,7 @@ class DcaHelper extends \Controller
         // delete all records for this table/pid
         $this->truncateTargets($dc->id, 'tl_page');
 
-        if (\strlen($val)) {
+        if (\strlen((string) $val)) {
             $this->saveTarget($dc->id, 'tl_page', 'cssClass');
         }
 
@@ -129,7 +135,7 @@ class DcaHelper extends \Controller
         // delete all records for this table/pid
         $this->truncateTargets($dc->id, 'tl_article', 'cssID');
 
-        if (\strlen($val)) {
+        if (\strlen((string) $val)) {
             // get sections
             $secs = $this->Input->post('_Article_Row');
             if (!\is_array($secs) || !\count($secs)) {
@@ -157,7 +163,7 @@ class DcaHelper extends \Controller
         // delete all records for this table/pid
         $this->truncateTargets($dc->id, 'tl_article', 'teaserCssID');
 
-        if (\strlen($val)) {
+        if (\strlen((string) $val)) {
             // get sections
             $secs = $this->Input->post('_Article_Row');
             if (!\is_array($secs) || !\count($secs)) {
@@ -203,14 +209,14 @@ class DcaHelper extends \Controller
         $vals = unserialize($val);
 
         if (!\is_array($vals) && $this->Input->post('_CE_Row')) {
-            throw new \Exception($GLOBALS['TL_LANG']['tl_stylepicker4ward']['_ceError']);
+            throw new Exception($GLOBALS['TL_LANG']['tl_stylepicker4ward']['_ceError']);
         }
 
         if (\is_array($vals)) {
             // get sections
             $secs = $this->Input->post('_CE_Row');
             if (!\is_array($secs) || !\count($secs)) {
-                throw new \Exception($GLOBALS['TL_LANG']['tl_stylepicker4ward']['_rowError']);
+                throw new Exception($GLOBALS['TL_LANG']['tl_stylepicker4ward']['_rowError']);
             }
 
             // save CEs foreach section
@@ -267,14 +273,14 @@ class DcaHelper extends \Controller
 
     public function loadPagelayouts($val)
     {
-        $val = explode(',', $val);
+        $val = explode(',', (string) $val);
 
         return serialize($val);
     }
 
     public function savePagelayouts($val)
     {
-        $val = deserialize($val, true);
+        $val = StringUtil::deserialize($val, true);
 
         return implode(',', $val);
     }
@@ -288,8 +294,8 @@ class DcaHelper extends \Controller
         $this->loadLanguageFile('tl_article');
         $ret = ['header', 'left', 'right', 'main', 'footer'];
 
-        $custom = explode(',', $GLOBALS['TL_CONFIG']['customSections']);
-        if (\strlen($GLOBALS['TL_CONFIG']['customSections']) && \is_array($custom)) {
+        $custom = explode(',', (string) $GLOBALS['TL_CONFIG']['customSections']);
+        if (\strlen((string) $GLOBALS['TL_CONFIG']['customSections']) && \is_array($custom)) {
             $ret = array_merge($ret, $custom);
         }
 

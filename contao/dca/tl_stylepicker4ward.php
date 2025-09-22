@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use Contao\DC_Table;
+use Contao\DataContainer;
+
 /**
  * Contao Extension to pick predefined CSS-Classes in the backend.
  *
@@ -14,7 +17,7 @@ $GLOBALS['TL_DCA']['tl_stylepicker4ward'] =
 [
     // Config
     'config' => [
-        'dataContainer' => 'Table',
+        'dataContainer' => DC_Table::class,
         'ptable' => 'tl_theme',
         'enableVersioning' => true,
         'oncopy_callback' => [['Stylepicker4ward\DcaHelper', 'copy']],
@@ -29,10 +32,10 @@ $GLOBALS['TL_DCA']['tl_stylepicker4ward'] =
     // List
     'list' => [
         'sorting' => [
-            'mode' => 4,
+            'mode' => DataContainer::MODE_PARENT,
             'fields' => ['title'],
             'headerFields' => ['name', 'author', 'tstamp'],
-            'flag' => 1,
+            'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
             'child_record_callback' => ['Stylepicker4ward\DcaHelper', 'generateItem'],
             'panelLayout' => 'sort,search,limit',
         ],
@@ -103,7 +106,7 @@ $GLOBALS['TL_DCA']['tl_stylepicker4ward'] =
             'label' => &$GLOBALS['TL_LANG']['tl_stylepicker4ward']['title'],
             'inputType' => 'text',
             'sorting' => true,
-            'flag' => 1,
+            'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
             'search' => true,
             'eval' => [
                 'mandatory' => true,
