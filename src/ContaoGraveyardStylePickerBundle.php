@@ -7,4 +7,5 @@ namespace ContaoGraveyard\StylePickerBundle;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
 class ContaoGraveyardStylePickerBundle extends AbstractBundle
-{}
+{
+}
