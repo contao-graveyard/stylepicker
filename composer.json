@@ -1,43 +1,55 @@
 {
-  "name": "psi/stylepicker4ward",
-  "description": "CSS Class selection wizard for contao",
-  "keywords": ["css class"],
-  "type": "contao-module",
-  "homepage": "https://github.com/psi-4ward/stylepicker4ward",
-  "license": "LGPL-3.0+",
-  "authors": [
-    {
-      "name": "Christoph Wiechert",
-      "email": "cw@4wardmedia.de",
-      "homepage": "http://4wardmedia.de",
-      "role": "Developer"
+    "name": "contao-graveyard/stylepicker",
+    "type": "contao-bundle",
+    "description": "CSS Class selection wizard for contao",
+    "keywords": ["css class"],
+    "homepage": "https://github.com/contao-graveyard/stylepicker",
+    "license": "LGPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Sebastian Zoglowek",
+            "homepage": "https://github.com/zoglo",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/contao-graveyard/stylepicker/issues",
+        "source": "https://github.com/contao-graveyard/stylepicker",
+        "forum": "https://community.contao.org"
+    },
+    "require": {
+        "php": "^8.3",
+        "contao/core-bundle": "^4.13 || ^5.3"
+    },
+    "require-dev": {
+        "contao/manager-plugin": "^2.0",
+        "shipmonk/composer-dependency-analyser": "^1.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "ContaoGraveyard\\ContaoStylepicker\\": "src/"
+        },
+        "classmap": [
+            "contao/"
+        ],
+        "exclude-from-classmap": [
+            "contao/config/",
+            "contao/dca/",
+            "contao/languages/",
+            "contao/templates/"
+        ]
+    },
+    "scripts": {
+        "depcheck": "@php vendor/bin/composer-dependency-analyser --config=depcheck.php"
+    },
+    "extra": {
+        "contao-manager-plugin": "ContaoGraveyard\\ContaoStylepicker\\ContaoManager\\Plugin"
+    },
+    "config": {
+        "allow-plugins": {
+            "contao-components/installer": false,
+            "contao/manager-plugin": false,
+            "php-http/discovery": false
+        }
     }
-  ],
-  "support": {
-    "email": "cw@4wardmedia.de",
-    "issues": "https://github.com/psi-4ward/stylepicker4ward/issues",
-    "forum": "https://community.contao.org/de/forumdisplay.php?110-4ward",
-    "irc": "irc://irc.freenode.org/contao.dev",
-    "source": "https://github.com/psi-4ward/stylepicker4ward"
-  },
-  "require": {
-    "php": ">=5.3",
-    "contao/core": ">=3.1,<4"
-  },
-  "replace": {
-    "contao-legacy/stylepicker4ward": "self.version"
-  },
-  "conflict": {
-    "contao/core": "3.0.*"
-  },
-  "extra": {
-    "contao": {
-      "sources": {
-        "": "system/modules/_stylepicker4ward"
-      },
-      "runonce": [
-        "runonce/32update.php"
-      ]
-    }
-  }
 }
