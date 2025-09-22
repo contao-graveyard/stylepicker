@@ -19,7 +19,7 @@
     },
     "require": {
         "php": "^8.3",
-        "contao/core-bundle": "^4.13 || ^5.3"
+        "contao/core-bundle": "^5.3"
     },
     "require-dev": {
         "contao/manager-plugin": "^2.0",
@@ -40,7 +40,8 @@
         ]
     },
     "scripts": {
-        "depcheck": "@php vendor/bin/composer-dependency-analyser --config=depcheck.php"
+        "depcheck": "@php vendor/bin/composer-dependency-analyser --config=depcheck.php",
+        "rector": "@php vendor/bin/rector --debug"
     },
     "extra": {
         "contao-manager-plugin": "ContaoGraveyard\\StylePickerBundle\\ContaoManager\\Plugin"
