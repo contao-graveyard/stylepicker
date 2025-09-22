@@ -20,4 +20,4 @@ ArrayUtil::arrayInsert($GLOBALS['TL_DCA']['tl_theme']['list']['operations'], 6, 
         'href' => 'table=tl_stylepicker4ward',
         'icon' => 'system/modules/_stylepicker4ward/assets/icon.png',
     ],
-    ]);
+]);

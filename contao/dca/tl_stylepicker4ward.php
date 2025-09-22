@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Contao\DC_Table;
 use Contao\DataContainer;
+use Contao\DC_Table;
 
 /**
  * Contao Extension to pick predefined CSS-Classes in the backend.

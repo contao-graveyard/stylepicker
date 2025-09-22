@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use Contao\System;
-use Symfony\Component\HttpFoundation\Request;
-use Contao\Input;
 use Contao\Environment;
+use Contao\Input;
+use Contao\System;
 use Psi\Stylepicker4ward\Importer;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Contao Extension to pick predefined CSS-Classes in the backend.

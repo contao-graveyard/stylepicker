@@ -8,17 +8,17 @@ declare(strict_types=1);
 
 namespace Psi\Stylepicker4ward;
 
-use Contao\System;
-use Contao\Controller;
-use Contao\SelectMenu;
-use Contao\Widget;
-use Contao\CheckBox;
-use Contao\Input;
-use Contao\Database;
-use Contao\Message;
-use Contao\LayoutModel;
-use Contao\StringUtil;
 use Contao\BackendTemplate;
+use Contao\CheckBox;
+use Contao\Controller;
+use Contao\Database;
+use Contao\Input;
+use Contao\LayoutModel;
+use Contao\Message;
+use Contao\SelectMenu;
+use Contao\StringUtil;
+use Contao\System;
+use Contao\Widget;
 
 class Importer
 {

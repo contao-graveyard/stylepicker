@@ -10,9 +10,8 @@ namespace Psi\Stylepicker4ward;
 
 use Contao\Controller;
 use Contao\Database;
-use Contao\Input;
 use Contao\Image;
-use Exception;
+use Contao\Input;
 use Contao\StringUtil;
 
 class DcaHelper extends Controller
@@ -137,7 +136,7 @@ class DcaHelper extends Controller
 
         if (\strlen((string) $val)) {
             // get sections
-            $secs = $this->Input->post('_Article_Row');
+            $secs = Input::post('_Article_Row');
             if (!\is_array($secs) || !\count($secs)) {
                 return '';
             }
@@ -165,7 +164,7 @@ class DcaHelper extends Controller
 
         if (\strlen((string) $val)) {
             // get sections
-            $secs = $this->Input->post('_Article_Row');
+            $secs = Input::post('_Article_Row');
             if (!\is_array($secs) || !\count($secs)) {
                 return '';
             }
@@ -208,15 +207,15 @@ class DcaHelper extends Controller
 
         $vals = unserialize($val);
 
-        if (!\is_array($vals) && $this->Input->post('_CE_Row')) {
-            throw new Exception($GLOBALS['TL_LANG']['tl_stylepicker4ward']['_ceError']);
+        if (!\is_array($vals) && Input::post('_CE_Row')) {
+            throw new \Exception($GLOBALS['TL_LANG']['tl_stylepicker4ward']['_ceError']);
         }
 
         if (\is_array($vals)) {
             // get sections
-            $secs = $this->Input->post('_CE_Row');
+            $secs = Input::post('_CE_Row');
             if (!\is_array($secs) || !\count($secs)) {
-                throw new Exception($GLOBALS['TL_LANG']['tl_stylepicker4ward']['_rowError']);
+                throw new \Exception($GLOBALS['TL_LANG']['tl_stylepicker4ward']['_rowError']);
             }
 
             // save CEs foreach section
