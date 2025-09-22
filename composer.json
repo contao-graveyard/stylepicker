@@ -27,7 +27,7 @@
     },
     "autoload": {
         "psr-4": {
-            "ContaoGraveyard\\ContaoStylePicker\\": "src/"
+            "ContaoGraveyard\\StylePickerBundle\\": "src/"
         },
         "classmap": [
             "contao/"
@@ -43,7 +43,7 @@
         "depcheck": "@php vendor/bin/composer-dependency-analyser --config=depcheck.php"
     },
     "extra": {
-        "contao-manager-plugin": "ContaoGraveyard\\ContaoStylePicker\\ContaoManager\\Plugin"
+        "contao-manager-plugin": "ContaoGraveyard\\StylePickerBundle\\ContaoManager\\Plugin"
     },
     "config": {
         "allow-plugins": {
