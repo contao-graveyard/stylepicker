@@ -44,7 +44,7 @@ class DcaHelper extends Controller
 
         while ($objErg->next()) {
             $GLOBALS['TL_DCA'][$table]['fields'][$objErg->fld]['eval']['tl_class'] .= ' wizard';
-            $GLOBALS['TL_DCA'][$table]['fields'][$objErg->fld]['wizard']['stylepicker'] = [DcaHelper::class, 'getStylepicker'];
+            $GLOBALS['TL_DCA'][$table]['fields'][$objErg->fld]['wizard']['stylepicker'] = self::getStylepicker(...);
         }
 
         // little hack to adjust the wizard for the article-section
@@ -93,7 +93,7 @@ class DcaHelper extends Controller
             $str = '';
         }
 
-        return $str . ' <a href="javascript:openStylepickerPopup(\'' . $url . '\');">' . Image::getHtml('bundles/contaograveyardstylepicker/assets/icon.png', ($GLOBALS['TL_LANG']['MSC']['stylepicker4ward'] ?? ''), 'style="vertical-align:top;margin-left:3px;margin-top:3px;"') . '</a>';
+        return $str . ' <a href="javascript:openStylepickerPopup(\'' . $url . '\');">' . Image::getHtml('bundles/contaograveyardstylepicker/assets/icon.png', $GLOBALS['TL_LANG']['MSC']['stylepicker4ward'] ?? '', 'style="vertical-align:top;margin-left:3px;margin-top:3px;"') . '</a>';
     }
 
     public function generateItem($arrRow)
