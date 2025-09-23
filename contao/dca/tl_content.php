@@ -19,8 +19,8 @@ class tl_content_stylepicker extends tl_content
         $ret = '';
         $cssID = StringUtil::deserialize($arrRow['cssID']);
         $ret .= $this->addCteType($arrRow);
-        if ($cssID[1]) {
-            $ret .= '<div style="position: absolute; top: 30px; color: #999; right: 10px">' . $GLOBALS['TL_LANG']['tl_content']['_cssclasses'] . '' . $cssID[1] . '</div>';
+        if (!empty($cssID[1])) {
+            $ret .= '<div style="position: absolute; top: 30px; color: #999; right: 10px">' . ($GLOBALS['TL_LANG']['tl_content']['_cssclasses'] ?? null) . '' . $cssID[1] . '</div>';
         }
 
         return $ret;

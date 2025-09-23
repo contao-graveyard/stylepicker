@@ -22,6 +22,8 @@ class DcaHelper extends Controller
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->Database = Database::getInstance();
     }
 
@@ -42,7 +44,7 @@ class DcaHelper extends Controller
 
         while ($objErg->next()) {
             $GLOBALS['TL_DCA'][$table]['fields'][$objErg->fld]['eval']['tl_class'] .= ' wizard';
-            $GLOBALS['TL_DCA'][$table]['fields'][$objErg->fld]['wizard']['stylepicker'] = ['\Stylepicker4ward\DcaHelper', 'getStylepicker'];
+            $GLOBALS['TL_DCA'][$table]['fields'][$objErg->fld]['wizard']['stylepicker'] = [DcaHelper::class, 'getStylepicker'];
         }
 
         // little hack to adjust the wizard for the article-section
@@ -58,9 +60,9 @@ class DcaHelper extends Controller
      */
     public function getStylepicker($dc)
     {
-        $GLOBALS['TL_CSS']['stylepicker4ward'] = 'system/modules/_stylepicker4ward/assets/style.css';
+        $GLOBALS['TL_CSS']['stylepicker4ward'] = 'bundles/contaograveyardstylepicker/assets/style.css';
 
-        $url = 'system/modules/_stylepicker4ward/public/popup.php?tbl=' . $dc->table . '&fld=' . $dc->field . '&inputName=ctrl_' . $dc->inputName . '&id=' . $dc->id;
+        $url = 'bundles/contaograveyardstylepicker/public/popup.php?tbl=' . $dc->table . '&fld=' . $dc->field . '&inputName=ctrl_' . $dc->inputName . '&id=' . $dc->id;
 
         static $injected = false;
 
@@ -91,7 +93,7 @@ class DcaHelper extends Controller
             $str = '';
         }
 
-        return $str . ' <a href="javascript:openStylepickerPopup(\'' . $url . '\');">' . Image::getHtml('system/modules/_stylepicker4ward/assets/icon.png', $GLOBALS['TL_LANG']['MSC']['stylepicker4ward'], 'style="vertical-align:top;margin-left:3px;margin-top:3px;"') . '</a>';
+        return $str . ' <a href="javascript:openStylepickerPopup(\'' . $url . '\');">' . Image::getHtml('bundles/contaograveyardstylepicker/assets/icon.png', ($GLOBALS['TL_LANG']['MSC']['stylepicker4ward'] ?? ''), 'style="vertical-align:top;margin-left:3px;margin-top:3px;"') . '</a>';
     }
 
     public function generateItem($arrRow)
@@ -204,14 +206,14 @@ class DcaHelper extends Controller
         $vals = unserialize($val);
 
         if (!\is_array($vals) && Input::post('_CE_Row')) {
-            throw new \Exception($GLOBALS['TL_LANG']['tl_stylepicker4ward']['_ceError']);
+            throw new \Exception($GLOBALS['TL_LANG']['tl_stylepicker4ward']['_ceError'] ?? '');
         }
 
         if (\is_array($vals)) {
             // get sections
             $secs = Input::post('_CE_Row');
             if (!\is_array($secs) || !\count($secs)) {
-                throw new \Exception($GLOBALS['TL_LANG']['tl_stylepicker4ward']['_rowError']);
+                throw new \Exception($GLOBALS['TL_LANG']['tl_stylepicker4ward']['_rowError'] ?? '');
             }
 
             // save CEs foreach section
@@ -289,8 +291,8 @@ class DcaHelper extends Controller
         $this->loadLanguageFile('tl_article');
         $ret = ['header', 'left', 'right', 'main', 'footer'];
 
-        $custom = explode(',', (string) $GLOBALS['TL_CONFIG']['customSections']);
-        if (\strlen((string) $GLOBALS['TL_CONFIG']['customSections']) && \is_array($custom)) {
+        $custom = explode(',', (string) ($GLOBALS['TL_CONFIG']['customSections'] ?? null));
+        if (\strlen((string) ($GLOBALS['TL_CONFIG']['customSections'] ?? null)) && \is_array($custom)) {
             $ret = array_merge($ret, $custom);
         }
 
