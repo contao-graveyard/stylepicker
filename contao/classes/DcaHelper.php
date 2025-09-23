@@ -44,7 +44,7 @@ class DcaHelper extends Controller
 
         while ($objErg->next()) {
             $GLOBALS['TL_DCA'][$table]['fields'][$objErg->fld]['eval']['tl_class'] .= ' wizard';
-            $GLOBALS['TL_DCA'][$table]['fields'][$objErg->fld]['wizard']['stylepicker'] = self::getStylepicker(...);
+            $GLOBALS['TL_DCA'][$table]['fields'][$objErg->fld]['wizard']['stylepicker'] = [DcaHelper::class, 'getStylepicker'];
         }
 
         // little hack to adjust the wizard for the article-section
