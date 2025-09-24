@@ -6,4 +6,4 @@ services:
 
     ContaoGraveyard\StylePickerBundle\:
         resource: '../src/'
-        #exclude: '../src/{Model}'
+        exclude: '../src/{Event}'

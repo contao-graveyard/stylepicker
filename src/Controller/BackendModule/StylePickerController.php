@@ -11,7 +11,9 @@ use Contao\FilesModel;
 use Contao\Input;
 use Contao\PageModel;
 use Contao\System;
+use ContaoGraveyard\StylePickerBundle\Event\GetStylePickerFilterEvent;
 use Doctrine\DBAL\Connection;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,6 +29,7 @@ class StylePickerController extends AbstractBackendController
     public function __construct(
         private readonly Connection $connection,
         private readonly TranslatorInterface $translator,
+        private readonly EventDispatcher $eventDispatcher,
     ) {
     }
 
@@ -49,24 +52,24 @@ class StylePickerController extends AbstractBackendController
 
         $template->field = $inputName;
 
-        $tbl = Input::get('tbl');
-        $fld = Input::get('fld');
+        $table = Input::get('tbl');
+        $field = Input::get('fld');
         $id  = Input::get('id');
 
-        $sec = false;
-        $cond = false;
+        $section = false;
+        $condition = false;
         $layout = [];
 
         // find pid (stylesheet-id) and section
-        switch ($tbl) {
+        switch ($table) {
             case 'tl_content':
                 $objContent = $this->connection->fetchAssociative(
                     'SELECT type, pid FROM tl_content WHERE id = ?',
                     [$id]
                 );
 
-                $id   = $objContent['pid'] ?? null;
-                $cond = $objContent['type'] ?? null;
+                $id = $objContent['pid'] ?? null;
+                $condition = $objContent['type'] ?? null;
 
             // no break
 
@@ -76,7 +79,7 @@ class StylePickerController extends AbstractBackendController
                     [$id]
                 );
 
-                $sec = $objArticle['inColumn'] ?? null;
+                $section = $objArticle['inColumn'] ?? null;
                 $id  = $objArticle['pid']  ?? null;
 
             // no break
@@ -97,25 +100,33 @@ class StylePickerController extends AbstractBackendController
                  * 		str $sec: a section (column) identifier
                  * 		str $cond: some addition condition
                  */
-                if (isset($GLOBALS['TL_HOOKS']['stylepicker4ward_getFilter']) && is_array($GLOBALS['TL_HOOKS']['stylepicker4ward_getFilter'])) {
+                /*if (isset($GLOBALS['TL_HOOKS']['stylepicker4ward_getFilter']) && is_array($GLOBALS['TL_HOOKS']['stylepicker4ward_getFilter'])) {
                     foreach ($GLOBALS['TL_HOOKS']['stylepicker4ward_getFilter'] as $callback) {
                         System::importStatic($callback[0]);
-                        $erg = $this->{$callback[0]}->{$callback[1]}($tbl, $id);
-                        if (is_array($erg)) {
-                            [$tbl, $layout, $sec, $cond] = $erg;
+                        $result = $this->{$callback[0]}->{$callback[1]}($table, $id);
+                        if (is_array($result)) {
+                            [$table, $layout, $section, $condition] = $result;
                             break;
                         }
                     }
-                }
+                }*/
+
+                $event = new GetStylePickerFilterEvent($table, (int) $id);
+                $this->eventDispatcher->dispatch($event);
+
+                $layout = $event->getLayout();
+                $section = $event->getSection();
+                $condition = $event->getCondition();
+
                 break;
         }
 
         // build where clause
         // respect the order for little query optimising
-        if (!preg_match('~^[a-z0-9_\\-]+$~i', (string) $tbl)) {
+        if (!preg_match('~^[a-z0-9_\\-]+$~i', (string) $table)) {
             throw new \InvalidArgumentException('unexpected chars in tbl-param');
         }
-        if (!preg_match('~^[a-z0-9_\\-]*$~i', (string) $sec)) {
+        if (!preg_match('~^[a-z0-9_\\-]*$~i', (string) $section)) {
             throw new \InvalidArgumentException('unexpected chars in sec-param');
         }
 
@@ -124,12 +135,12 @@ class StylePickerController extends AbstractBackendController
         if ($layout) {
             $arrWhere[] = 'FIND_IN_SET(' . $layout . ',c.layouts)';
         }
-        $arrWhere[] = 'tbl="' . $tbl . '"';
-        if ($sec) {
-            $arrWhere[] = 'sec="' . $sec . '"';
+        $arrWhere[] = 'tbl="' . $table . '"';
+        if ($section) {
+            $arrWhere[] = 'sec="' . $section . '"';
         }
-        if (strlen($fld)) {
-            $arrWhere[] = 'fld="' . $fld . '"';
+        if (strlen($field)) {
+            $arrWhere[] = 'fld="' . $field . '"';
         }
 
         // get all classes
@@ -152,11 +163,11 @@ class StylePickerController extends AbstractBackendController
         unset($item);
 
         // filter condition
-        if ($cond) {
+        if ($condition) {
             foreach ($arrItems as $k => $item) {
                 if (!empty($item['cond'])) {
                     $arrConds = explode(',', (string) $item['cond']);
-                    if (!in_array($cond, $arrConds, true)) {
+                    if (!in_array($condition, $arrConds, true)) {
                         unset($arrItems[$k]);
                     }
                 }
