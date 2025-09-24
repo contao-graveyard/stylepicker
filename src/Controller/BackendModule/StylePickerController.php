@@ -10,10 +10,9 @@ use Contao\CoreBundle\Controller\AbstractBackendController;
 use Contao\FilesModel;
 use Contao\Input;
 use Contao\PageModel;
-use Contao\System;
 use ContaoGraveyard\StylePickerBundle\Event\GetStylePickerFilterEvent;
 use Doctrine\DBAL\Connection;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,7 +28,7 @@ class StylePickerController extends AbstractBackendController
     public function __construct(
         private readonly Connection $connection,
         private readonly TranslatorInterface $translator,
-        private readonly EventDispatcher $eventDispatcher,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
     }
 
