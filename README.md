@@ -4,7 +4,7 @@
 > This plugin has been revived as an example for a conference talk at the contao conference in 2025.
 > Whilst most, if not all the functionality is given, this extension should most likely not be used in production at all.
 
-<h1 align="center">Contao StylePicker (formerly known as `stylepicker4ward`)</h1>
+<h1 align="center">Contao StylePicker (formerly known as stylepicker4ward)</h1>
 <p align="center">
     <a href="https://github.com/contao-graveyard/stylepicker"><img src="https://img.shields.io/github/v/release/contao-graveyard/stylepicker" alt="github version"/></a>
     <a href="https://packagist.org/packages/contao-graveyard/stylepicker"><img src="https://img.shields.io/packagist/dt/contao-graveyard/stylepicker?color=f47c00" alt="amount of downloads"/></a>
