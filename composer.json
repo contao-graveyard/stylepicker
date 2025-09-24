@@ -51,7 +51,10 @@
         "rector": "@php vendor/bin/rector --debug"
     },
     "extra": {
-        "contao-manager-plugin": "ContaoGraveyard\\StylePickerBundle\\ContaoManager\\Plugin"
+        "contao-manager-plugin": "ContaoGraveyard\\StylePickerBundle\\ContaoManager\\Plugin",
+        "branch-alias": {
+            "dev-main": "3.x-dev"
+        }
     },
     "config": {
         "allow-plugins": {
