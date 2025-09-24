@@ -1,8 +1,8 @@
 > [!CAUTION]
 > USE AT YOUR OWN RISK / Do not use in production
 >
-> This plugin has been revived as an example for a conference talk at the contao conference in 2025
-> Whilst most, if not all the functionality is given, this extension should most likely not be used in production at all
+> This plugin has been revived as an example for a conference talk at the contao conference in 2025.
+> Whilst most, if not all the functionality is given, this extension should most likely not be used in production at all.
 
 <h1 align="center">Contao StylePicker (formerly known as `stylepicker4ward`)</h1>
 <p align="center">
