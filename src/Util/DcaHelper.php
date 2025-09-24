@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
-namespace ContaoGraveyard\StylePickerBundle;
+namespace ContaoGraveyard\StylePickerBundle\Util;
 
 use Contao\Controller;
 use Contao\Database;
 use Contao\Image;
 use Contao\Input;
 use Contao\StringUtil;
+use ContaoGraveyard\StylePickerBundle\Controller\BackendModule\StylePickerController;
+use Symfony\Component\Routing\RouterInterface;
 
 class DcaHelper extends Controller
 {
@@ -20,8 +22,9 @@ class DcaHelper extends Controller
     /**
      * Construct the class.
      */
-    public function __construct()
-    {
+    public function __construct(
+        private readonly RouterInterface $router,
+    ) {
         parent::__construct();
 
         $this->Database = Database::getInstance();
@@ -62,7 +65,12 @@ class DcaHelper extends Controller
     {
         $GLOBALS['TL_CSS']['stylepicker4ward'] = 'bundles/contaograveyardstylepicker/assets/style.css';
 
-        $url = 'bundles/contaograveyardstylepicker/public/popup.php?tbl=' . $dc->table . '&fld=' . $dc->field . '&inputName=ctrl_' . $dc->inputName . '&id=' . $dc->id;
+        $url = $this->router->generate(StylePickerController::class, [
+            'tbl' => $dc->table,
+            'fld' => $dc->field,
+            'inputName' => 'ctrl_' . $dc->inputName,
+            'id' => $dc->id,
+        ]);
 
         static $injected = false;
 

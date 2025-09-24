@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use Contao\System;
-use ContaoGraveyard\StylePickerBundle\DcaHelper;
-use ContaoGraveyard\StylePickerBundle\Importer;
+use ContaoGraveyard\StylePickerBundle\Util\DcaHelper;
+use ContaoGraveyard\StylePickerBundle\Util\Importer;
 use Symfony\Component\HttpFoundation\Request;
 
 if (System::getContainer()->get('contao.routing.scope_matcher')->isBackendRequest(System::getContainer()->get('request_stack')->getCurrentRequest() ?? Request::create(''))) {

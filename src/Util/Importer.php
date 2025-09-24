@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ContaoGraveyard\StylePickerBundle;
+namespace ContaoGraveyard\StylePickerBundle\Util;
 
 use Contao\BackendTemplate;
 use Contao\CheckBox;
