@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Contao\DataContainer;
 use Contao\DC_Table;
-use ContaoGraveyard\StylePickerBundle\DcaHelper;
+use ContaoGraveyard\StylePickerBundle\Util\DcaHelper;
 
 $GLOBALS['TL_DCA']['tl_stylepicker4ward'] = [
     // Config

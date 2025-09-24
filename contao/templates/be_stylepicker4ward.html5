@@ -1,150 +1,126 @@
-<!DOCTYPE html>
-<html lang="<?php echo $this->language; ?>">
-<head>
-<meta charset="<?php echo $this->charset; ?>">
-<title><?php echo $this->title; ?> - Contao Open Source CMS <?php echo VERSION; ?></title>
-<base href="<?php echo $this->base; ?>">
-<?php if ($this->loadFonts): ?>
-<link rel="stylesheet" href="<?php echo TL_ASSETS_URL; ?>system/themes/<?php echo $this->theme; ?>/fonts.css">
-<?php endif; ?>
-<link rel="stylesheet" href="<?php
-  $objCombiner = new Combiner();
-  $objCombiner->add('system/themes/'. $this->theme .'/basic.css');
-  $objCombiner->add('system/themes/'. $this->theme .'/main.css');
-  echo $objCombiner->getCombinedFile();
-?>">
-<!--[if IE]><link rel="stylesheet" href="<?php echo TL_ASSETS_URL; ?>system/themes/<?php echo $this->theme; ?>/iefixes.css"><![endif]-->
-<?php echo $this->stylesheets; ?>
-<style media="screen">
-body {
-  background-image: none;
-}
-body.popup #main {
-  left:0;
-  float:none;
-  min-height: 0;
-}
-body.popup #tl_helpBox {
-  margin-left:-353px;
-}
-.item {
-  padding-top:7px;
-}
-.item > div {
-  padding:5px 10px 5px 35px;
-  width:100%;
-  clear:both;
-  overflow:hidden;
-  position:relative;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-}
-.item > div.image {
-  /* min-height:100px;
-  padding-right:110px; */
-}
-.item > div img {
-  cursor:pointer;
-  float:left;
-  margin:12px 10px 5px 0;
-}
-.item > div > input {
-  position:absolute;
-  left:5px;
-  top:5px;
-}
-.item > div > div {
-  margin-bottom:10px;
-  float:none;
-  display:block;
-  width:auto;
-}
-.item > div h2 {
-  margin:1px 0 0;
-  clear:both;
-}
-.item > div span {
-  color:#A6A6A6;
-  font-weight:normal
-}
-.item > div p {
-  margin-bottom:0;
-  margin-top:9px;
-}
-hr {
-  height:1px;
-  margin:0px;
-}
-</style>
-<script><?php echo $this->getLocaleString(); ?></script>
-<script src="<?php
-  $objCombiner = new Combiner();
-  $objCombiner->add('assets/mootools/core/' . MOOTOOLS . '/mootools.js', MOOTOOLS);
-  $objCombiner->add('assets/mootools/datepicker/'. DATEPICKER .'/datepicker.js', DATEPICKER);
-  $objCombiner->add('assets/mootools/mootao/Mootao.js');
-  $objCombiner->add('assets/contao/js/core.js');
-  $objCombiner->add('system/themes/'. $this->theme .'/hover.js');
-  echo $objCombiner->getCombinedFile();
-?>"></script>
-<script><?php echo $this->getDateString(); ?></script>
-<?php echo $this->javascripts; ?>
-<!--[if lt IE 9]><script src="<?php echo TL_ASSETS_URL; ?>assets/html5shiv/<?php echo HTML5SHIV; ?>/html5shiv.js"></script><![endif]-->
-<script src="bundles/contaograveyardstylepicker/assets/stylepicker4ward.js"></script>
-</head>
-<body class="__ua__ popup">
-
-<div id="container">
-<div id="main">
-
-<h1 class="main_headline"><?php echo $this->headline; ?></h1>
-<?php if ($this->error): ?>
-
-<p class="tl_gerror"><?php echo $this->error; ?></p>
-<?php endif; ?>
-
-<?php /*** Wizard START ***/ ?>
 <div class="tl_formbody_edit" id="styleItems" style="padding:10px">
-<?php if(count($this->items)):?>
-<?php foreach($this->items as $item):?>
-    <div class="item" onmouseout="Theme.hoverDiv(this, 0);" onmouseover="Theme.hoverDiv(this, 1);">
-    <div<?php if(strlen($item['image'])):?> class="image"<?php endif; ?>>
-        <input type="checkbox" value="<?php echo $item['cssclass'];?> "/>
-        <div>
-            <h2><?php echo $item['title'];?> <span>(<?php echo $item['cssclass'];?>)</span></h2>
-            <?php if(strlen($item['image'])):?>
-                <?php $objFile = \FilesModel::findByPk($item['image']); ?>
-                <img src="<?php echo $this->getImage($objFile->path,80,80,'proportional');?>" alt="" rel="<?php echo $objFile->path;?>"/>
-            <?php endif;?>
-            <?php if(strlen($item['description'])):?><p class="description"><?php echo $item['description'];?></p><?php endif;?>
+  <?php if (count($this->items)): ?>
+    <?php foreach ($this->items as $item): ?>
+      <div class="item hover-div hover-row">
+        <div<?php if ($item['image'] !== null): ?> class="image"<?php endif; ?>>
+          <input type="checkbox" value="<?= $item['cssclass']; ?> "/>
+          <div>
+            <h2><?= $item['title']; ?> <span>(<?= $item['cssclass']; ?>)</span></h2>
+            <?php if ($item['image'] !== null): ?>
+              <?= $this->figure($item['image'], [80, 80, 'proportional']) ?>
+            <?php endif; ?>
+            <?php if (strlen($item['description'])): ?><p
+              class="description"><?= $item['description'] ?? ''; ?></p><?php endif; ?>
+          </div>
         </div>
-    </div>
-        <hr />
-    </div>
-<?php endforeach;?>
-<?php else:?>
-    <p class="error"><?php echo $GLOBALS['TL_LANG']['MSC']['stylepicker4ward_noItems'];?></p>
-<?php endif;?>
+        <hr/>
+      </div>
+    <?php endforeach; ?>
+  <?php else: ?>
+    <p class="error"><?= $this->trans('MSC.stylepicker4ward_noItems', [], 'contao_default') ?></p>
+  <?php endif; ?>
 </div>
 <script>
-window.addEvent('domready',function(){
-    new Stylepicker4ward($('styleItems'),'<?php echo $this->field;?>');
-});
+  class StylePicker {
+    constructor(cont, parentFieldId) {
+      this.cont = cont;
+      this.checkboxes = Array.from(cont.querySelectorAll('input'));
+
+      // find parent class-field
+      let parentField = parent.document.getElementById(parentFieldId);
+      if (!parentField) {
+        alert('Parent-Field not found! [E11]');
+        return;
+      }
+
+      if (parentField.tagName.toLowerCase() !== 'input') {
+        const inputs = parentField.querySelectorAll('input');
+        if (!inputs || inputs.length < 1) {
+          alert('Parent-Field not found! [E12]');
+          return;
+        }
+        this.parentField = inputs[inputs.length - 1];
+      } else {
+        this.parentField = parentField;
+      }
+
+      cont.querySelectorAll('.item').forEach(el => {
+        el.addEventListener('click', e => this.clickItem(e, el));
+      });
+
+      const classes = this.parentField.value.trim().split(/\s+/);
+      classes.forEach(cls => {
+        this.checkboxes.forEach(cb => {
+          if (cls === cb.value.trim()) {
+            cb.checked = true;
+          }
+        });
+      });
+    }
+
+    clickItem(e, el) {
+      const target = e.target;
+
+      if (target.tagName.toLowerCase() === 'img' && target.getAttribute('rel')) {
+        this.showImage(e, target);
+        return;
+      }
+
+      const input = el.querySelector('input');
+      if (!input) return;
+
+      if (!e || target.tagName.toLowerCase() !== 'input') {
+        input.checked ^= 1;
+      }
+
+      const classname = input.value.trim();
+      let classes = this.parentField.value.trim().split(/\s+/).filter(Boolean);
+
+      if (input.checked) {
+        if (!classes.includes(classname)) {
+          classes.push(classname);
+        }
+      } else {
+        classes = classes.filter(c => c !== classname);
+      }
+
+      this.parentField.value = classes.join(' ');
+    }
+
+    showImage(ev, el) {
+      const src = el.getAttribute('rel');
+      const img = new Image();
+      img.src = src;
+
+      img.onload = () => {
+        const size = { x: img.naturalWidth, y: img.naturalHeight };
+
+        Object.assign(img.style, {
+          height: '0px',
+          width: '0px',
+          position: 'absolute',
+          left: el.getBoundingClientRect().x + window.scrollX + 'px',
+          top: el.getBoundingClientRect().y + window.scrollY + 'px',
+          transition: 'all 0.4s cubic-bezier(0.86, 0, 0.07, 1)'
+        });
+
+        img.addEventListener('click', () => {
+          img.style.height = '0px';
+          img.style.width = '0px';
+          img.addEventListener('transitionend', () => img.remove(), { once: true });
+        });
+
+        document.body.appendChild(img);
+
+        requestAnimationFrame(() => {
+          img.style.height = size.y + 'px';
+          img.style.width = size.x + 'px';
+        });
+      };
+    }
+  }
+
+  window.onload = () => {
+    new StylePicker(document.querySelector('#styleItems'), '<?= $this->field; ?>');
+  }
 </script>
-
-<?php /*** Wizard END ***/ ?>
-
-</div>
-
-<div class="clear"></div>
-</div>
-<?php if ($this->pageOffset): ?>
-
-<script>
-Backend.vScrollTo(<?php echo $this->pageOffset; ?>);
-</script>
-<?php setcookie('BE_PAGE_OFFSET', 0, 0, '/'); endif; ?>
-<?php echo $this->mootools; ?>
-
-</body>
-</html>
