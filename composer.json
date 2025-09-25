@@ -56,11 +56,15 @@
             "dev-main": "3.x-dev"
         }
     },
+    "conflict": {
+        "squizlabs/php_codesniffer": "^4.0"
+    },
     "config": {
         "allow-plugins": {
             "contao-components/installer": false,
             "contao/manager-plugin": false,
-            "php-http/discovery": false
+            "php-http/discovery": false,
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     }
 }
