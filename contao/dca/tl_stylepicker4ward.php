@@ -43,33 +43,11 @@ $GLOBALS['TL_DCA']['tl_stylepicker4ward'] = [
             ],
         ],
         'operations' => [
-            'edit' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_stylepicker4ward']['edit'],
-                'href' => 'act=edit',
-                'icon' => 'edit.gif',
-            ],
-            'copy' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_stylepicker4ward']['copy'],
-                'href' => 'act=paste&amp;mode=copy',
-                'icon' => 'copy.gif',
-            ],
-            'cut' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_stylepicker4ward']['cut'],
-                'href' => 'act=paste&amp;mode=cut',
-                'icon' => 'cut.gif',
-                'attributes' => 'onclick="Backend.getScrollOffset()"',
-            ],
-            'delete' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_stylepicker4ward']['delete'],
-                'href' => 'act=delete',
-                'icon' => 'delete.gif',
-                'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
-            ],
-            'show' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_stylepicker4ward']['show'],
-                'href' => 'act=show',
-                'icon' => 'show.gif',
-            ],
+            'edit',
+            'copy',
+            'cut',
+            'delete',
+            'show',
         ],
     ],
 
