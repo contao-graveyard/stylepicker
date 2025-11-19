@@ -29,6 +29,6 @@ class Plugin implements BundlePluginInterface, RoutingPluginInterface
         return $resolver
             ->resolve('@ContaoGraveyardStylePickerBundle/src/Controller')
             ->load('@ContaoGraveyardStylePickerBundle/src/Controller')
-            ;
+        ;
     }
 }

@@ -8,8 +8,10 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class GetStylePickerFilterEvent extends Event
 {
-    private array|string|int|null $layout = null;
+    private array|int|string|null $layout = null;
+
     private bool|string|null $section = null;
+
     private bool|string|null $condition = null;
 
     public function __construct(
@@ -28,12 +30,12 @@ class GetStylePickerFilterEvent extends Event
         return $this->id;
     }
 
-    public function getLayout(): array|string|int|null
+    public function getLayout(): array|int|string|null
     {
         return $this->layout;
     }
 
-    public function setLayout(array|string|int|null $layout): void
+    public function setLayout(array|int|string|null $layout): void
     {
         $this->layout = $layout;
     }

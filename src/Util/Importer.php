@@ -18,6 +18,8 @@ use Contao\Widget;
 
 class Importer
 {
+    public $objDc;
+
     public function generate()
     {
         Controller::loadLanguageFile('stylepicker4ward_import');
@@ -168,6 +170,7 @@ class Importer
                     ),
                 );
 
+                // ToDo: Fix the TL_REFERER_ID Constant
                 Controller::redirect(
                     \sprintf(
                         'contao/main.php?do=themes&table=tl_stylepicker4ward&id=%s&rt=%s&ref=%s',
@@ -186,7 +189,10 @@ class Importer
         return $template->parse();
     }
 
-    protected function getContentElementNames()
+    /**
+     * @return mixed[]
+     */
+    protected function getContentElementNames(): array
     {
         $contentElements = [];
 
@@ -197,7 +203,10 @@ class Importer
         return $contentElements;
     }
 
-    protected function getSectionNames()
+    /**
+     * @return mixed[]
+     */
+    protected function getSectionNames(): array
     {
         $sections = ['header', 'left', 'right', 'main', 'footer'];
 

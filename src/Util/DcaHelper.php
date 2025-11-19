@@ -47,7 +47,7 @@ class DcaHelper extends Controller
 
         while ($objErg->next()) {
             $GLOBALS['TL_DCA'][$table]['fields'][$objErg->fld]['eval']['tl_class'] .= ' wizard';
-            $GLOBALS['TL_DCA'][$table]['fields'][$objErg->fld]['wizard']['stylepicker'] = [DcaHelper::class, 'getStylepicker'];
+            $GLOBALS['TL_DCA'][$table]['fields'][$objErg->fld]['wizard']['stylepicker'] = [self::class, 'getStylepicker'];
         }
 
         // little hack to adjust the wizard for the article-section
@@ -58,10 +58,8 @@ class DcaHelper extends Controller
 
     /**
      * Return the stylepicker wizard html.
-     *
-     * @return string
      */
-    public function getStylepicker($dc)
+    public function getStylepicker($dc): string
     {
         $GLOBALS['TL_CSS']['stylepicker4ward'] = 'bundles/contaograveyardstylepicker/assets/style.css';
 
@@ -97,14 +95,15 @@ class DcaHelper extends Controller
                 </script>
                 CssButton;
             $injected = true;
-        } else {
+        }
+        else {
             $str = '';
         }
 
         return $str . ' <a href="javascript:openStylepickerPopup(\'' . $url . '\');">' . Image::getHtml('bundles/contaograveyardstylepicker/assets/icon.png', $GLOBALS['TL_LANG']['MSC']['stylepicker4ward'] ?? '', 'style="vertical-align:top;margin-left:3px;margin-top:3px;"') . '</a>';
     }
 
-    public function generateItem($arrRow)
+    public function generateItem(array $arrRow): string
     {
         return $arrRow['title'] . ': ' . $arrRow['cssclass'];
     }
@@ -112,21 +111,20 @@ class DcaHelper extends Controller
     /* =========================== */
     /* Pages */
     /* =========================== */
-    public function savePages($val, $dc)
+    public function savePages($val, $dc): string
     {
         // delete all records for this table/pid
         $this->truncateTargets($dc->id, 'tl_page');
 
-        if (\strlen((string) $val)) {
+        if ((string) $val !== '') {
             $this->saveTarget($dc->id, 'tl_page', 'cssClass');
         }
 
         return '';
     }
 
-    public function loadPages($val, $dc)
+    public function loadPages($val, $dc): string
     {
-        $arrReturn = [];
         $objTargets = $this->Database->prepare('SELECT count(pid) AS anz FROM tl_stylepicker4ward_target WHERE pid=? AND tbl=?')->execute($dc->id, 'tl_page');
 
         return $objTargets->anz > 0 ? '1' : '';
@@ -135,12 +133,12 @@ class DcaHelper extends Controller
     /* =========================== */
     /* Articles */
     /* =========================== */
-    public function saveArticles($val, $dc)
+    public function saveArticles($val, $dc): string
     {
         // delete all records for this table/pid
         $this->truncateTargets($dc->id, 'tl_article', 'cssID');
 
-        if (\strlen((string) $val)) {
+        if ((string) $val !== '') {
             // get sections
             $secs = Input::post('_Article_Row');
             if (!\is_array($secs) || !\count($secs)) {
@@ -156,19 +154,19 @@ class DcaHelper extends Controller
         return '';
     }
 
-    public function loadArticles($val, $dc)
+    public function loadArticles($val, $dc): string
     {
         $objTargets = $this->Database->prepare('SELECT count(pid) AS anz FROM tl_stylepicker4ward_target WHERE pid=? AND tbl=? AND fld=?')->execute($dc->id, 'tl_article', 'cssID');
 
         return $objTargets->anz > 0 ? '1' : '';
     }
 
-    public function saveArticleTeasers($val, $dc)
+    public function saveArticleTeasers($val, $dc): string
     {
         // delete all records for this table/pid
         $this->truncateTargets($dc->id, 'tl_article', 'teaserCssID');
 
-        if (\strlen((string) $val)) {
+        if ((string) $val !== '') {
             // get sections
             $secs = Input::post('_Article_Row');
             if (!\is_array($secs) || !\count($secs)) {
@@ -184,14 +182,14 @@ class DcaHelper extends Controller
         return '';
     }
 
-    public function loadArticleTeasers($val, $dc)
+    public function loadArticleTeasers($val, $dc): string
     {
         $objTargets = $this->Database->prepare('SELECT count(pid) AS anz FROM tl_stylepicker4ward_target WHERE pid=? AND tbl=? AND fld=?')->execute($dc->id, 'tl_article', 'teaserCssID');
 
         return $objTargets->anz > 0 ? '1' : '';
     }
 
-    public function loadArticle_Rows($val, $dc)
+    public function loadArticle_Rows($val, $dc): string
     {
         $arrReturn = [];
         $objTargets = $this->Database->prepare('SELECT DISTINCT(sec) FROM tl_stylepicker4ward_target WHERE pid=? AND tbl=?')->execute($dc->id, 'tl_article');
@@ -206,7 +204,7 @@ class DcaHelper extends Controller
     /* =========================== */
     /* Content elements */
     /* =========================== */
-    public function saveCEs($val, $dc)
+    public function saveCEs($val, $dc): string
     {
         // delete all records for this table/pid
         $this->truncateTargets($dc->id, 'tl_content');
@@ -235,7 +233,7 @@ class DcaHelper extends Controller
         return '';
     }
 
-    public function loadCEs($val, $dc)
+    public function loadCEs($val, $dc): string
     {
         $arrReturn = [];
         $objTargets = $this->Database->prepare('SELECT DISTINCT(cond) FROM tl_stylepicker4ward_target WHERE pid=? AND tbl=?')->execute($dc->id, 'tl_content');
@@ -247,7 +245,7 @@ class DcaHelper extends Controller
         return serialize($arrReturn);
     }
 
-    public function loadCE_Rows($val, $dc)
+    public function loadCE_Rows($val, $dc): string
     {
         $arrReturn = [];
         $objTargets = $this->Database->prepare('SELECT DISTINCT(sec) FROM tl_stylepicker4ward_target WHERE pid=? AND tbl=?')->execute($dc->id, 'tl_content');
@@ -261,13 +259,12 @@ class DcaHelper extends Controller
 
     /**
      * lädt vorhandene Inhaltselemente aus $GLOBALS['TL_CTE'].
-     * @return array
      */
-    public function getContentElements()
+    public function getContentElements(): array
     {
         $arrCEs = [];
 
-        foreach ($GLOBALS['TL_CTE'] as $key => $arr) {
+        foreach ($GLOBALS['TL_CTE'] as $arr) {
             foreach ($arr as $elementName => $val) {
                 $arrCEs[] = $elementName;
             }
@@ -276,14 +273,14 @@ class DcaHelper extends Controller
         return $arrCEs;
     }
 
-    public function loadPagelayouts($val)
+    public function loadPagelayouts($val): string
     {
         $val = explode(',', (string) $val);
 
         return serialize($val);
     }
 
-    public function savePagelayouts($val)
+    public function savePagelayouts($val): string
     {
         $val = StringUtil::deserialize($val, true);
 
@@ -294,14 +291,14 @@ class DcaHelper extends Controller
      * get all sections.
      * @return array tl_stylepicker4ward_target
      */
-    public function getSections()
+    public function getSections(): array
     {
         $this->loadLanguageFile('tl_article');
         $ret = ['header', 'left', 'right', 'main', 'footer'];
 
         $custom = explode(',', (string) ($GLOBALS['TL_CONFIG']['customSections'] ?? null));
         if (\strlen((string) ($GLOBALS['TL_CONFIG']['customSections'] ?? null)) && \is_array($custom)) {
-            $ret = array_merge($ret, $custom);
+            return array_merge($ret, $custom);
         }
 
         return $ret;
@@ -309,10 +306,9 @@ class DcaHelper extends Controller
 
     /**
      * get all pagelayouts for the current theme.
-     * @param  DataContainer $dc
-     * @return array
+     * @param DataContainer $dc
      */
-    public function getPagelayouts($dc)
+    public function getPagelayouts($dc): array
     {
         $objLayouts = $this->Database->prepare('SELECT id,name FROM tl_layout WHERE pid=?')->execute($dc->activeRecord->pid);
         $arrLayouts = [];
@@ -328,7 +324,7 @@ class DcaHelper extends Controller
      * void function for some callbacks.
      * @return string ''
      */
-    public function doNothing()
+    public function doNothing(): string
     {
         return '';
     }
@@ -373,7 +369,8 @@ class DcaHelper extends Controller
     {
         if ($fld) {
             $this->Database->prepare('DELETE FROM tl_stylepicker4ward_target WHERE pid=? AND tbl=? AND fld=?')->execute($pid, $tbl, $fld);
-        } else {
+        }
+        else {
             $this->Database->prepare('DELETE FROM tl_stylepicker4ward_target WHERE pid=? AND tbl=?')->execute($pid, $tbl);
         }
     }

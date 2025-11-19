@@ -12,16 +12,19 @@ use Contao\Input;
 use Contao\PageModel;
 use ContaoGraveyard\StylePickerBundle\Event\GetStylePickerFilterEvent;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route(
     path: '%contao.backend.route_prefix%/stylepicker',
     name: StylePickerController::class,
-    defaults: ['_scope' => 'backend']
+    defaults: [
+        '_scope' => 'backend',
+    ],
 )]
 class StylePickerController extends AbstractBackendController
 {
@@ -33,7 +36,7 @@ class StylePickerController extends AbstractBackendController
     }
 
     /**
-     * @throws \Doctrine\DBAL\Exception
+     * @throws Exception
      */
     public function __invoke(Request $request): Response
     {
@@ -53,7 +56,7 @@ class StylePickerController extends AbstractBackendController
 
         $table = Input::get('tbl');
         $field = Input::get('fld');
-        $id  = Input::get('id');
+        $id = Input::get('id');
 
         $section = false;
         $condition = false;
@@ -64,28 +67,28 @@ class StylePickerController extends AbstractBackendController
             case 'tl_content':
                 $objContent = $this->connection->fetchAssociative(
                     'SELECT type, pid FROM tl_content WHERE id = ?',
-                    [$id]
+                    [$id],
                 );
 
                 $id = $objContent['pid'] ?? null;
                 $condition = $objContent['type'] ?? null;
 
-            // no break
+                // no break
 
             case 'tl_article':
                 $objArticle = $this->connection->fetchAssociative(
                     'SELECT pid, inColumn FROM tl_article WHERE id = ?',
-                    [$id]
+                    [$id],
                 );
 
                 $section = $objArticle['inColumn'] ?? null;
-                $id  = $objArticle['pid']  ?? null;
+                $id = $objArticle['pid'] ?? null;
 
-            // no break
+                // no break
 
             case 'tl_page':
                 $objPage = PageModel::findWithDetails($id);
-                $layout  = $objPage->layout;
+                $layout = $objPage->layout;
                 break;
 
             default:
@@ -138,7 +141,7 @@ class StylePickerController extends AbstractBackendController
         if ($section) {
             $arrWhere[] = 'sec="' . $section . '"';
         }
-        if (strlen($field)) {
+        if ($field !== '') {
             $arrWhere[] = 'fld="' . $field . '"';
         }
 
@@ -149,7 +152,7 @@ class StylePickerController extends AbstractBackendController
      LEFT JOIN tl_stylepicker4ward AS c ON (t.pid = c.id)
      WHERE ' . implode(' AND ', $arrWhere) . '
      GROUP BY c.id
-     ORDER BY c.title'
+     ORDER BY c.title',
         );
 
         // resolve images
@@ -166,7 +169,7 @@ class StylePickerController extends AbstractBackendController
             foreach ($arrItems as $k => $item) {
                 if (!empty($item['cond'])) {
                     $arrConds = explode(',', (string) $item['cond']);
-                    if (!in_array($condition, $arrConds, true)) {
+                    if (!\in_array($condition, $arrConds, true)) {
                         unset($arrItems[$k]);
                     }
                 }
